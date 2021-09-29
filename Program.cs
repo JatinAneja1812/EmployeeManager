@@ -1,17 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Employee
 {
     public class Employees
     {
-        private String EmpName;
-        private String EmpID;
-        private double hrsWorked;
-        private double HourlyRate=9.50;
+        public String EmpName { get; set; }
+        public String EmpID { get; set; }
+        public double hrsWorked { get; set; }
+        public String weeklywage { get; set; }
+        public double HourlyRate = 9.50;
 
 
-        public Employees()
+    public Employees()
         {
 
         }
@@ -22,6 +24,8 @@ namespace Employee
             this.hrsWorked = hrsWorked;
             HourlyRate = hourlyRate;
         }
+       
+
 
         public String CalcWage(Double hrs)
         {
@@ -79,7 +83,7 @@ namespace Employee
                 {
                     //converting string to char[]
                     char[] char_arr = id.ToCharArray();
-                    if(Char.IsLetter(char_arr[0]) == true && char.IsDigit(char_arr[1]) == true && char.IsDigit(char_arr[2]) == true)
+                    if (Char.IsLetter(char_arr[0]) == true && char.IsDigit(char_arr[1]) == true && char.IsDigit(char_arr[2]) == true)
                     {
                         return true;
                     }
@@ -139,28 +143,170 @@ namespace Employee
             return 0;
         }
 
-      
-        public void ToString(string result)
+
+        public String ToString(string result)
         {
             String ans = ("Emplyee " + this.EmpName + " with Employee ID " + this.EmpID + " weekely wage is £:" + result);
-            Console.WriteLine(ans);
-            Console.ReadLine();
+            return ans;
         }
     }
 
 
-    class EmployeeManager 
+
+    class EmployeeManager
     {
-
-        public static void Main(string[] args)
+        static List<Employees> empDetail = new List<Employees>();
+        
+        static void Main(string[] args)
         {
+            Int32 option1 = DisplayMainMenu();
+            MainCall(option1);
+            Console.Read();
+        }
+        /// <summary>
+        /// Containing switch to handle which method to execute
+        /// <param name="option">Option to Add\Delete\Update Employee Information</param>
+        /// </summary>
+        private static void MainCall(Int32 option)
+        {
+            
+            switch (option)
+            {
+                case 1:
+                    AddEmployee();
+                    break;
+                case 2:
+                    DisplayList();
+                    Int32 option1 = DisplayMainMenu();
+                    MainCall(option1);
+                    break;
+                case 3:
+                    Console.WriteLine("Enter the position of Employee you want to delete:");
+                    int pos = int.Parse(Console.ReadLine());
+                    int result = DeleteEmployee(pos);
+                    if (result == 1)
+                        Console.WriteLine("Employee deleted");
+                    else
+                        Console.WriteLine("Employee with ID:" + empDetail[pos].EmpID + " not found");
+                    option1 = DisplayMainMenu();
+                    MainCall(option1);
+                    break;
+                case 4:
+                    Console.WriteLine("BYEEEEEEEEEEEEEEEEEEEEE!!!!!!!!!!!!!!!!!!!");
+                    break;
+                default:
+                    Console.WriteLine("Invalid Input!!!!!!Re-Enter");
+                    option1 = DisplayMainMenu();
+                    MainCall(option1);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Display Main menu
+        /// </summary>
+        private static int DisplayMainMenu()
+        {
+            Console.WriteLine("\nSelect any option:");
+            Console.WriteLine("1. Add Employee");
+            Console.WriteLine("2. Display Employee");
+            Console.WriteLine("3. Delete Employee");
+            Console.WriteLine("4. Exit");
+
+            Int32 option = 0;
+            try
+            {
+                option = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Some Error Occured");
+            }
+            return option;
+        }
+
+        /// <summary>
+        /// Add New Employee
+        /// </summary>
+        public static List<Employees> AddEmployee()
+        {
+
             Employees emp = new Employees();
-            Console.WriteLine("Staff's infomation");
-            String name = emp.Getname();
-            String id = emp.Getid();
-            Double hrs = emp.Gethrsworked();
-            String res = emp.CalcWage(hrs);
-            emp.ToString(res);
+            
+
+            try
+            {
+                Console.WriteLine("Enter following information to add new Employee:");
+                emp.EmpName = emp.Getname();
+                emp.EmpID = emp.Getid();
+                emp.hrsWorked = emp.Gethrsworked();
+                emp.weeklywage = emp.CalcWage(emp.hrsWorked);
+               
+                empDetail.Add(emp);
+                Console.WriteLine("Employee Weeky Wage :£{0}", emp.weeklywage);
+                Console.WriteLine("Press Enter to proceed!!");
+                Console.ReadKey();
+                Console.WriteLine("Employee successfully Added");
+                
+                Console.WriteLine(@"Do you want to add more Employee? Y\N");
+                char choice = Console.ReadKey().KeyChar;
+                switch (Char.ToUpper(choice))
+                {
+                    case 'Y':
+                        AddEmployee();
+                        break;
+                    case 'N':
+                        Int32 option1 = DisplayMainMenu();
+                        MainCall(option1);
+                        break;
+                    default:
+                        Console.WriteLine("Some Error Occured!! Please select right option");
+                        Console.WriteLine("-----------------------------------------------");
+                        option1 = DisplayMainMenu();
+                        MainCall(option1);
+                        break;
+
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Some Error Occured!! Please select right option");
+                Console.WriteLine("-----------------------------------------------");
+                Int32 option1 = DisplayMainMenu();
+                MainCall(option1);
+            }
+            return empDetail;
+        }
+
+        /// <summary>
+        /// Display Employee List
+        /// </summary>
+        private static void DisplayList()
+        {
+            int pos = 0;
+            Console.WriteLine("");
+            Console.WriteLine("-----------------------------Employee Detail---------------------------------------");
+            foreach (Employees emp in empDetail)
+            {
+                Console.WriteLine(pos +". Employee ID:" + emp.EmpID + " Name:" + emp.EmpName + " Weekly Wage is £:" + emp.weeklywage);
+                pos++;
+            }
+        }
+        /// <summary>
+        /// Delete Existing Employee
+        /// <param name="empid">Which Employee Id to delete</param>
+        /// </summary>
+        private static int DeleteEmployee(int pos)
+        {
+            if (empDetail.Count > pos && empDetail[pos] != null)
+            {
+                empDetail.RemoveAt(pos);
+                return 1;
+            }
+            return 0;
         }
     }
+
+
+
 }
