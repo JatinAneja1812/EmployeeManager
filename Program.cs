@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Employee
@@ -48,7 +49,7 @@ namespace Employee
 
         public bool isValid(string name)
         {
-            if (name.Length >= 1 && name.Length <= 50)
+            if (name.Length >= 1 && name.Length <= 50 && name.Any(ch => Char.IsLetterOrDigit(ch)))
                 return true;
             return false;
         }
@@ -66,7 +67,7 @@ namespace Employee
                 }
                 else
                 {
-                    Console.WriteLine("Entered name is not valid , please re-enter:  ");
+                    Console.WriteLine("Entered name is not valid , press enter to continue to re-enter:  ");
                     Console.ReadLine();
 
                 }
@@ -105,7 +106,7 @@ namespace Employee
                 }
                 else
                 {
-                    Console.WriteLine("Entered Id is not valid , please re-enter:  ");
+                    Console.WriteLine("Entered Id is not valid , press enter to continue to reenter:  ");
                     Console.ReadLine();
 
                 }
@@ -261,6 +262,9 @@ namespace Employee
                 
                 Console.WriteLine(@"Do you want to add more Employee? Y\N");
                 char choice = Console.ReadKey().KeyChar;
+                Console.ReadLine();
+
+
                 switch (Char.ToUpper(choice))
                 {
                     case 'Y':
