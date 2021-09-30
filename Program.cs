@@ -241,12 +241,23 @@ namespace Employee
                 emp.EmpID = emp.Getid();
                 emp.hrsWorked = emp.Gethrsworked();
                 emp.weeklywage = emp.CalcWage(emp.hrsWorked);
-               
-                empDetail.Add(emp);
-                Console.WriteLine("Employee Weeky Wage :£{0}", emp.weeklywage);
+                if (empDetail.Count > 0){
+                    foreach (Employees empd in empDetail)
+                    {
+                        if(empd.EmpID.Equals(emp.EmpID))
+                            Console.WriteLine("This Employee already exists in the list !!");
+                        break;
+                    }
+                }
+                else { 
+                    empDetail.Add(emp);
+                    Console.WriteLine("Employee Weeky Wage :£{0}", emp.weeklywage);
+                }
+
                 Console.WriteLine("Press Enter to proceed!!");
                 Console.ReadKey();
                 Console.WriteLine("Employee successfully Added");
+                Console.ReadLine();
                 
                 Console.WriteLine(@"Do you want to add more Employee? Y\N");
                 char choice = Console.ReadKey().KeyChar;
