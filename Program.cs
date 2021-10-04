@@ -14,7 +14,7 @@ namespace Employee
         public double HourlyRate = 9.50;
 
 
-    public Employees()
+        public Employees()
         {
 
         }
@@ -25,40 +25,39 @@ namespace Employee
             this.hrsWorked = hrsWorked;
             HourlyRate = hourlyRate;
         }
-       
+
 
 
         public String CalcWage(Double hrs)
         {
+            double wage;
             if (hrs > 40)
             {
-                Double wage = ((HourlyRate * 40) + (14.25 * (hrs - 40)));
-                wage = Math.Round(wage, 4, MidpointRounding.AwayFromZero);
-                String result = string.Format("{0:F2}", wage);
-                return result;
+                wage = ((HourlyRate * 40) + (14.25 * (hrs - 40)));
             }
             else
             {
-                Double wage = hrs * HourlyRate;
-                wage = Math.Round(wage, 4, MidpointRounding.AwayFromZero);
-                String result = string.Format("{0:F2}", wage);
-                return result;
+                wage = hrs * HourlyRate;
             }
+            wage = Math.Round(wage, 4, MidpointRounding.AwayFromZero);
+            String result = string.Format("{0:F2}", wage);
+            return result;
         }
         // validations
-
+        
         public bool isValid(string name)
         {
-            if (name.Length >= 1 && name.Length <= 50 && name.Any(ch => Char.IsLetterOrDigit(ch)))
+            if (name.Length >= 1 && name.Length <= 50 && name.Substring(0,1).Any(ch => Char.IsLetterOrDigit(ch)))
                 return true;
             return false;
         }
         public string Getname()
         {
             Boolean res;
+            Console.WriteLine("Enter the Employee Name: ");
+
             do
             {
-                Console.WriteLine("Enter the Employee Name: ");
                 EmpName = Console.ReadLine();
                 res = isValid(EmpName);
                 if (res == true)
@@ -67,8 +66,8 @@ namespace Employee
                 }
                 else
                 {
-                    Console.WriteLine("Entered name is not valid , press enter to continue to re-enter:  ");
-                    Console.ReadLine();
+                    Console.WriteLine("Entered name is not valid, please re-enter:  ");
+                    //Console.ReadLine();
 
                 }
             } while (res != true);
@@ -95,9 +94,10 @@ namespace Employee
         public string Getid()
         {
             Boolean res;
+            Console.WriteLine("Enter the Employee ID: (e.g. D54) :  ");
             do
             {
-                Console.WriteLine("Enter the Employee ID: (e.g. D54) :  ");
+               
                 EmpID = Console.ReadLine();
                 res = isvalidEmpID(EmpID);
                 if (res == true)
@@ -106,7 +106,7 @@ namespace Employee
                 }
                 else
                 {
-                    Console.WriteLine("Entered Id is not valid , press enter to continue to reenter:  ");
+                    Console.WriteLine("Entered Id is not valid , please reenter:  ");
                     Console.ReadLine();
 
                 }
@@ -116,7 +116,10 @@ namespace Employee
 
         public bool isvalidWorkingHrs(double hrs)
         {
-            if (hrs < 0 && hrs > 100)
+            if (hrs < 0)
+            {
+                return false;
+            }else if (hrs > 100)
             {
                 return false;
             }
@@ -136,7 +139,7 @@ namespace Employee
                 }
                 else
                 {
-                    Console.WriteLine("Entered Id is not valid , please re-enter:  ");
+                    Console.WriteLine("Entered hours Worked  is not valid , please re-enter:  ");
                     Console.ReadLine();
 
                 }
@@ -147,7 +150,10 @@ namespace Employee
 
         public String ToString(string result)
         {
-            String ans = ("Emplyee " + this.EmpName + " with Employee ID " + this.EmpID + " weekely wage is £:" + result);
+            String ans = "Emplyee " + this.EmpName + " with Employee ID " + this.EmpID + " weekely wage is £:" + result;
+            //String ans1 = $"Emplyee {this.EmpName} with Employee ID {this.EmpID } weekely wage is £:{result}";
+
+
             return ans;
         }
     }
@@ -157,7 +163,7 @@ namespace Employee
     class EmployeeManager
     {
         static List<Employees> empDetail = new List<Employees>();
-        
+
         static void Main(string[] args)
         {
             Int32 option1 = DisplayMainMenu();
@@ -170,7 +176,7 @@ namespace Employee
         /// </summary>
         private static void MainCall(Int32 option)
         {
-            
+
             switch (option)
             {
                 case 1:
@@ -233,7 +239,7 @@ namespace Employee
         {
 
             Employees emp = new Employees();
-            
+
 
             try
             {
@@ -242,15 +248,17 @@ namespace Employee
                 emp.EmpID = emp.Getid();
                 emp.hrsWorked = emp.Gethrsworked();
                 emp.weeklywage = emp.CalcWage(emp.hrsWorked);
-                if (empDetail.Count > 0){
+                if (empDetail.Count > 0)
+                {
                     foreach (Employees empd in empDetail)
                     {
-                        if(empd.EmpID.Equals(emp.EmpID))
+                        if (empd.EmpID.Equals(emp.EmpID))
                             Console.WriteLine("This Employee already exists in the list !!");
                         break;
                     }
                 }
-                else { 
+                else
+                {
                     empDetail.Add(emp);
                     Console.WriteLine("Employee Weeky Wage :£{0}", emp.weeklywage);
                 }
@@ -259,7 +267,7 @@ namespace Employee
                 Console.ReadKey();
                 Console.WriteLine("Employee successfully Added");
                 Console.ReadLine();
-                
+
                 Console.WriteLine(@"Do you want to add more Employee? Y\N");
                 char choice = Console.ReadKey().KeyChar;
                 Console.ReadLine();
@@ -303,7 +311,7 @@ namespace Employee
             Console.WriteLine("-----------------------------Employee Detail---------------------------------------");
             foreach (Employees emp in empDetail)
             {
-                Console.WriteLine(pos +". Employee ID:" + emp.EmpID + " Name:" + emp.EmpName + " Weekly Wage is £:" + emp.weeklywage);
+                Console.WriteLine(pos + ". Employee ID:" + emp.EmpID + " Name:" + emp.EmpName + " Weekly Wage is £:" + emp.weeklywage);
                 pos++;
             }
         }
