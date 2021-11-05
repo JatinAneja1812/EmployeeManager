@@ -30,20 +30,18 @@ namespace Employee
 
         public String CalcWage(Double hrs)
         {
+            Double wage;
             if (hrs > 40)
             {
-                Double wage = ((HourlyRate * 40) + (14.25 * (hrs - 40)));
-                wage = Math.Round(wage, 4, MidpointRounding.AwayFromZero);
-                String result = string.Format("{0:F2}", wage);
-                return result;
+                 wage = ((HourlyRate * 40) + (14.25 * (hrs - 40)));
             }
             else
             {
-                Double wage = hrs * HourlyRate;
-                wage = Math.Round(wage, 4, MidpointRounding.AwayFromZero);
-                String result = string.Format("{0:F2}", wage);
-                return result;
+                wage = hrs * HourlyRate;
             }
+            wage = Math.Round(wage, 4, MidpointRounding.AwayFromZero);
+            String result = string.Format("{0:F2}", wage);
+            return result;
         }
         // validations
 
